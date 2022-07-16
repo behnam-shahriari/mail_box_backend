@@ -7,6 +7,7 @@ const knex = require("knex");
 
 const register = require("./controllers/register");
 const signin = require("./controllers/signin");
+const emails = require("./controllers/emails");
 
 const db = knex({
   client: "pg",
@@ -31,6 +32,12 @@ app.post("/signin", signin.handleSignin(db, bcrypt));
 app.post("/register", (req, res) =>
   register.handleRegister(req, res, db, bcrypt, saltRounds)
 );
+app.get("/totalEmails/:id", (req, res) =>
+  emails.handleTotalEmailsGet(req, res, db)
+);
+
+app.get("/messages/:id", (req, res) => emails.handleMessage(req, res, db));
+// app.get("/profile/:id", (req, res) => emails.handleEmailsGet(req, res, db));
 
 app.listen(3000, () => {
   console.log("app is running on port 3000");
